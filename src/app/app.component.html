@@ -1,6 +1,6 @@
 <div class="header-container">
   <h3>Date</h3>
-  <input type="date" class="calendar-input" style="margin-left: 10px;">
+  <input type="date" class="calendar-input" style="margin-left: 10px;" [(ngModel)]="date">
   <div class="company-name-container" style="padding-left: 15%; padding-right: 15%;">
     <input type="text" class="company-name-input" placeholder="Company Name" [(ngModel)]="companyName">
   </div>
@@ -50,3 +50,8 @@
     </tr>
   </tbody>
 </table>
+
+
+<div style="position: fixed; bottom: 20px; right: 20px;">
+  <button (click)="exportToExcel()">Download Excel</button>
+</div>

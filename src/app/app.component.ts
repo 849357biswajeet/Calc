@@ -17,6 +17,8 @@ export class AppComponent implements OnInit {
 
   companyName: string | undefined;
   quotationNumber: string | undefined;
+  date: string | undefined;
+
 
   excelModel : ExcelModel[] | undefined; 
   items: any[] = [];
@@ -30,20 +32,23 @@ export class AppComponent implements OnInit {
   loadExcelData(){
     this.excelService.readExcelData().then(data => {
       this.excelModel = data;
-      console.log(this.excelModel[0].itemName)
+      console.log(this.excelModel.length)
     });
   }
 
-  onFileChange(event: any) {
-    const file: File = event.target.files[0];
-    let xx = this.excelService.readExcel(file);
-    console.log(xx);
-  }
+  // onFileChange(event: any) {
+  //   const file: File = event.target.files[0];
+  //   let xx = this.excelService.readExcel(file);
+  //   console.log(xx);
+  // }
 
   selectOption(selectedItem: any, serialNumber: any) {
     let dataItemFound = this.excelModel?.find(data=>{
        return data.itemNumber === selectedItem.target.value;
     });
+
+    console.log("dataItemFound")
+    console.log(dataItemFound)
 
     this.items.forEach(data=>{
       if(data.serialNumber === serialNumber){
@@ -102,4 +107,10 @@ export class AppComponent implements OnInit {
       this.items.splice(index, 1);
     }
   }
+
+  exportToExcel(){
+    console.log("done")
+    this.excelService.exportToExcel(this.companyName+"_" + this.quotationNumber + "_" + this.date, this.items);
+  }
+
 }
