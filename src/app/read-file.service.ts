@@ -12,7 +12,7 @@ export class ReadFileService {
   constructor(private http: HttpClient) { }
 
   public readExcelData(): Promise<any[]> {
-    return this.http.get('assets/mydata.xlsx', { responseType: 'arraybuffer' })
+    return this.http.get('assets/biswa.xlsx', { responseType: 'arraybuffer' })
       .toPromise()
       .then((buffer?: ArrayBuffer) => {
         const data: any[] = [];
