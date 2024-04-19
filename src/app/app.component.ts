@@ -7,6 +7,7 @@ class ExcelModel{
   mrp: string | undefined;
 }
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,31 +17,13 @@ export class AppComponent implements OnInit {
 
   companyName: string | undefined;
   quotationNumber: string | undefined;
-  selectedItemNumber: any;
 
   excelModel : ExcelModel[] | undefined; 
-  
-
-  items: any[] = [
-    // // Sample data
-    // { serialNumber: 1, itemNumber: 'ABC123', itemName: 'Item 1', quantity: 5, mrp: 100, discount: 10, rate: 90, value: 450, remark: '' },
-    // { serialNumber: 2, itemNumber: 'XYZ456', itemName: 'Item 2', quantity: 3, mrp: 150, discount: 15, rate: 135, value: 405, remark: '' }
-  ];
-
-  originalData: any[] = [];
-  selectedOption: any;
-  itemSerailNumber: string | undefined;
-
-
-  // Sample arrays of item numbers and names for suggestions
-  itemNumbers: string[] = ['ABC123', 'XYZ456', 'DEF789'];
-  itemNames: string[] = ['Item 1', 'Item 2', 'Item 3'];
+  items: any[] = [];
 
   constructor(private excelService: ReadFileService) {}
 
-  
   ngOnInit(): void {
-
     this.loadExcelData();
   }
 
@@ -57,35 +40,47 @@ export class AppComponent implements OnInit {
     console.log(xx);
   }
 
-  fusn(selectedOption: string, serialNumber: string) {
-    // Perform operations based on the selected option
-    console.log('Selected option:', selectedOption);
-    console.log('Selected option:',serialNumber);
+  selectOption(selectedItem: any, serialNumber: any) {
+    let dataItemFound = this.excelModel?.find(data=>{
+       return data.itemNumber === selectedItem.target.value;
+    });
 
     this.items.forEach(data=>{
       if(data.serialNumber === serialNumber){
-        data.mrp = 99999;
+        data.itemNumber = dataItemFound?.itemNumber;
+        data.itemName = dataItemFound?.itemName;
+        data.quantity = 1;
+        data.mrp = dataItemFound?.mrp;
+        data.discount = 0;
+        data.rate = dataItemFound?.mrp;
+        data.value = dataItemFound?.mrp;
       }
-    })
-    
+    });
+
+    // { serialNumber: 1, itemNumber: 'ABC123', itemName: 'Item 1', quantity: 5, mrp: 100, discount: 10, rate: 90, value: 450, remark: '' },
+  
   }
 
-  onItemSelect(selectedData: any) {
-    // Do something with the selected data object
-    console.log(selectedData.target.value);
-    // You can pass it to a function, store it in a variable, etc.
+  applyDiscount(discount: any, serialNumber: any){
+    this.items.forEach(data=>{
+      if(data.serialNumber === serialNumber){
+        data.discount = discount.target.value;
+        data.rate = data.mrp -  (data.mrp * discount.target.value)/100.00;
+        data.value = data.rate * data.quantity ;
+      }
+    });
   }
 
-  selectedOptions: any;
-  fun(selectedOption: any, itemSerialNumber: string) {
-    // Perform operations based on the selected option and item serial number
-    console.log('Selected option:', selectedOption);
-    console.log('Item serial number:', itemSerialNumber);
-    // Example operation: Display the selected option's item number
-    if (selectedOption) {
-      console.log('Selected item number:', selectedOption.itemNumber);
-    }
+  applyQuantity(quantity: any, serialNumber: any){
+    this.items.forEach(data=>{
+      if(data.serialNumber === serialNumber){
+        data.quantity = quantity.target.value;
+        data.value = data.rate * data.quantity * 1.0 ;
+      }
+    });
   }
+
+  
   
   addItem() {
     this.items.push({

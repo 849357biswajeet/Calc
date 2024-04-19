@@ -20,52 +20,30 @@
       <th>Serial Number</th>
       <th>Item Number</th>
       <th>Item Name</th>
-      <th>Quantity</th>
       <th>MRP</th>
       <th>Discount</th>
-      <th>Rate</th>
-      <th>Value</th>
+      <th>Discount Rate</th>
+      <th>Quantity</th>
+      <th>Total Value</th>
       <th>Remark</th>
       <th>Delete</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of items">
-      <td>{{ item.serialNumber }}</td>
+    <tr *ngFor="let item of items; let i = index">
+      <td>{{ i +1 }}</td>
       <td>
-        <input list="itemNumbers" (input)="onItemSelect($event)">
-        <datalist id="itemNumbers">
-            <option *ngFor="let data of excelModel" [ngValue]="data">{{ data.itemNumber }}</option>
-        </datalist>
-        <!-- <input list="itemNumbers" type="text" [(ngModel)]="selectedOptions" (change)="fun(selectedOptions, item.serialNumber)" />
+        <input list="itemNumbers" type="text"  (input)="selectOption($event, item.serialNumber)" />
         <datalist id="itemNumbers">
           <option *ngFor="let data of excelModel" [ngValue]="data">{{ data.itemNumber }}</option>
-        </datalist> -->
-      </td>
-      <!-- <td>
-        <input list="itemNumbers" type="text" [(ngModel)]="selectedOption" [(ngModel)]="itemSerailNumber" (change)="fun(selectedOption, item.serialNumber)" />
-        
-        <datalist id="itemNumbers">
-          <option *ngFor="let data of excelModel"  >{{ data.itemNumber }}</option>
-        </datalist>
-      </td> -->
-      <!-- <td>
-        <input list="itemNumbers" type="text" [(ngModel)]="data" (input)="handleInput($event)"/>
-        <datalist id="itemNumbers">
-          <option *ngFor="let data of excelModel" >{{ data.itemNumber }}</option>
-        </datalist>
-      </td> -->
-      <td>
-        <input list="itemNames" type="text" [(ngModel)]="item.itemName" />
-        <datalist id="itemNames">
-          <!-- Suggestions for item names -->
-          <option *ngFor="let data of excelModel" >{{ data.itemName }}</option>
         </datalist>
       </td>
-      <td><input type="number" [(ngModel)]="item.quantity" /></td>
+      <td>{{ item.itemName }}</td>
+      
       <td>{{ item.mrp }}</td>
-      <td><input type="number" [(ngModel)]="item.discount" /></td>
+      <td><input type="number"  [(ngModel)]="item.discount" (input)="applyDiscount($event, item.serialNumber)"/></td>
       <td>{{ item.rate }}</td>
+      <td><input type="number" [(ngModel)]="item.quantity" (input)="applyQuantity($event, item.serialNumber)" /></td>
       <td>{{ item.value }}</td>
       <td>{{ item.remark }}</td>
       <td><button (click)="deleteItem(item)">Delete</button></td>
